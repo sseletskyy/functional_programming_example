@@ -1,10 +1,10 @@
 {
-  "name": "interview_task",
+  "name": "functional_programming_example",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "example how to use ramda for functional programming",
   "scripts": {
-    "test": "ava"
+    "test": "ava apply_config.js --verbose",
+    "lint": "eslint ."
   },
   "author": "Sergiy Seletskyy <sseletskyy@gmail.com> (https://www.facebook.com/serge.seletskyy)",
   "license": "ISC",
