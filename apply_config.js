@@ -45,8 +45,10 @@ const lengthFunctor = numberOrAry => {
     ? filterRange
     : (typeof numberOrAry === 'number')
       ? filterExact
-      : _.identity
-  return _.filter(functor)
+      : null
+
+  // skip filter if functor is null/undefined
+  return functor && _.filter(functor) || _.identity
 
 }
 
@@ -56,8 +58,8 @@ const upperCaseFunctor = firstOrLast => {
   const last = item => item.slice(0, -1) + item.slice(-1).toUpperCase()
   const first = item => item.slice(0, 1).toUpperCase() + item.slice(1)
   const mapping = {first, last}
-  const functor = mapping[firstOrLast] || _.identity
-  return _.map(functor)
+  const functor = mapping[firstOrLast]
+  return functor && _.map(functor) || _.identity
 }
 
 
@@ -70,8 +72,12 @@ const stripFunctor = vowelsOrConsonants => {
   const consonants = char => consonantChars.indexOf(char) === -1
 
   const mapping = {vowels, consonants}
-  const functor = mapping[vowelsOrConsonants] || _.identity
+  const functor = mapping[vowelsOrConsonants]
 
+  if (!functor) {
+    return  _.identity
+  }
+  
   const mapper = item => item.split('').filter(functor).join('')
   return _.map(mapper)
 }
