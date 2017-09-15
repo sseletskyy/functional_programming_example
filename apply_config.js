@@ -77,7 +77,7 @@ const stripFunctor = vowelsOrConsonants => {
   if (!functor) {
     return  _.identity
   }
-  
+
   const mapper = item => item.split('').filter(functor).join('')
   return _.map(mapper)
 }
@@ -91,6 +91,16 @@ const _isFunction = function (obj) {
 // applyConfig :: Array A of Strings -> Array B of Objects -> Array B of Array `A of Strings
 // attention: the sequence of keys in config objects is important
 function applyConfig(words, configs) {
+  // const notString = item => typeof item !== 'string'
+  const notString = _.complement(_.is(String))
+  if (!Array.isArray(words) || _.any(notString, words)) {
+    throw new TypeError('First argument should be array of strings')
+  }
+
+  const notObject = _.complement(_.is(Object))
+  if(!Array.isArray(configs) || _.any(notObject, configs)) {
+    throw new TypeError('Second argument should be array of objects')
+  }
 
   // maps functors to config keys
   // expand it with new modifiers (functors) if needed
@@ -192,6 +202,29 @@ test('applyConfig all wrong keys in config', t => {
   const actual = applyConfig(words, [config])
   const expected = [[...words]]
   t.deepEqual(actual, expected)
+})
+
+test('applyConfig: wrong first argument type - should raise exception', t => {
+  const actual = () => applyConfig({}, [{}])
+  const error = t.throws(actual, TypeError)
+  t.is(error.message, 'First argument should be array of strings')
+})
+
+test('applyConfig: first argument is array of numbers - should raise exception', t => {
+  const actual = () => applyConfig([1,2,3], [{}])
+  const error = t.throws(actual, TypeError)
+  t.is(error.message, 'First argument should be array of strings')
+})
+
+test('applyConfig: wrong second argument type - should raise exception', t => {
+  const actual = () => applyConfig(words, 'test')
+  const error = t.throws(actual, TypeError)
+  t.is(error.message, 'Second argument should be array of objects')
+})
+test('applyConfig: second argument is array of strings - should raise exception', t => {
+  const actual = () => applyConfig(words, ['a','b','c'])
+  const error = t.throws(actual, TypeError)
+  t.is(error.message, 'Second argument should be array of objects')
 })
 
 test('length: number', t => {

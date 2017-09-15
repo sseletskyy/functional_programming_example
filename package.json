@@ -4,6 +4,7 @@
   "description": "example how to use ramda for functional programming",
   "scripts": {
     "test": "ava apply_config.js --verbose",
+    "test:watch": "ava apply_config.js --watch",
     "lint": "eslint ."
   },
   "author": "Sergiy Seletskyy <sseletskyy@gmail.com> (https://www.facebook.com/serge.seletskyy)",
